@@ -40,8 +40,8 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          child: const Text('Go to Counter Page'),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green, foregroundColor: Colors.white),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -49,27 +49,33 @@ class HomePage extends StatelessWidget {
               ),
             );
           },
+          child: const Text('Go to Counter Page'),
         ),
       ),
     );
   }
 }
 
-class CounterPage extends StatelessWidget {
+class CounterPage extends ConsumerWidget {
   const CounterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final int counter = ref.watch(counterProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Counter"),
       ),
       body: Center(
-        child: Text("0", style: Theme.of(context).textTheme.displayMedium),
+        child: Text(counter.toString(),
+            style: Theme.of(context).textTheme.displayMedium),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          ref.read(counterProvider.notifier).state++;
+        },
       ),
     );
   }
